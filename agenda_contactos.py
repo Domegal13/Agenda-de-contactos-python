@@ -1,15 +1,65 @@
+
+import re
 from colorama import init, Fore, Back, Style
 init()
 
 agenda = {}
+regex_nombre = r'^[a-zA-Z][a-zA-Z0-9\s\W]*$'
+regex_email = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+# regex_telefono =  re.compile(r"(\+\d{1,3})?\s?\(?\d{1,4}\)?[\s.-]?\d{3}[\s.-]?\d{4}")
+regex_telefono =  re.compile(r"(\+\d{1,5})?")
+
+
+#?  **************************** Función para Validar Nombre *******************************************
+
+def validar_nombre(nombre):
+    
+    if len(nombre) < 2 or len(nombre) >= 50:
+        return False
+    else:
+        if re.match(regex_nombre, nombre):
+            return True
+        else:
+            return False
+    
+
+#?  **************************** Función para Validar Email **************************************************
+
+def validar_email(email):
+    if re.fullmatch(regex_email, email):
+        return True
+    else:
+        return False
+        
+#?  **************************** Función para Validar Telefono **************************************************
+
+def validar_telf(telefono):
+    if re.search(regex_telefono, telefono):
+        return True
+    else:
+        return False
 
 #? 1. **************************** Función para Agregar un Contacto nuevo *******************************************
 def agregar_contacto(agenda):
     nombre = input('Por favor introduzca el nombre del contacto: ')
-    telefono = input('Por favor introduzca el teléfono del contacto: ')
-    email = input('Por favor introduzca el email del contacto: ')
-    agenda[nombre] = {'telefono': telefono, 'email': email}
-    print(f'¡Se ha agregado el contacto: {nombre} exitosamente!')
+    nombre = nombre.upper()
+    nombre_validado = validar_nombre(nombre)
+    if nombre_validado:
+        telefono = input('Por favor introduzca el teléfono del contacto: ')
+        telef_validado = validar_telf(telefono)
+        if telef_validado:
+            email = input('Por favor introduzca el email del contacto: ')
+            email = email.lower()
+            email_validado = validar_email(email)
+            if email_validado:
+                agenda[nombre] = {'telefono': telefono, 'email': email}
+                print(f'¡Se ha agregado el contacto: {nombre} exitosamente!')           
+            else:
+                print('El email ingresado es inválido')
+        else:
+            print('El número de telefono ingresado es inválido')
+    else:
+        print('El nombre ingresado es inválido')        
 
 
 #? 2. **************************** Función para Modificar Contacto Existente **** *******************************************
@@ -53,8 +103,7 @@ def switch_case_agenda(opcion):
     match(opcion):
         case 1:
             print(Fore.LIGHTYELLOW_EX + '\nAGREGAR CONTACTO')
-            # agregar_contacto()
-            # pass
+            agregar_contacto(agenda)
         case 2:
             print(Fore.LIGHTYELLOW_EX + '\nMODIFICAR CONTACTO')
             # modificar_contacto()
@@ -72,6 +121,7 @@ def switch_case_agenda(opcion):
             # eliminar_contacto()
             # pass
         case 6:
+            print(agenda)
             print(Fore.LIGHTYELLOW_EX + '\nSaliendo del sistema...')
         case _:
             print(Fore.LIGHTRED_EX + '\nIntroduzca un valor válido...' + Style.RESET_ALL)
@@ -92,4 +142,5 @@ def main_agenda_contactos():
 
 if __name__ == "__main__":
     main_agenda_contactos()
+   
 
