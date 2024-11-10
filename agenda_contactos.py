@@ -5,9 +5,11 @@ init()
 
 agenda = {}
 regex_nombre = r'^[a-zA-Z][a-zA-Z0-9\s\W]*$'
-regex_email = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+# regex_email = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 # regex_telefono =  re.compile(r"(\+\d{1,3})?\s?\(?\d{1,4}\)?[\s.-]?\d{3}[\s.-]?\d{4}")
 regex_telefono =  re.compile(r"(\+\d{1,5})?")
+regex_email = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+
 
 
 #?  **************************** Función para Validar Nombre *******************************************
@@ -42,22 +44,28 @@ def validar_telf(telefono):
 #? 1. **************************** Función para Agregar un Contacto nuevo *******************************************
 def agregar_contacto(agenda):
     nombre = input('Por favor introduzca el nombre del contacto: ')
-    nombre = nombre.upper()
+    nombre = nombre.upper().strip()
     nombre_validado = validar_nombre(nombre)
     if nombre_validado:
-        telefono = input('Por favor introduzca el teléfono del contacto: ')
-        telef_validado = validar_telf(telefono)
-        if telef_validado:
-            email = input('Por favor introduzca el email del contacto: ')
-            email = email.lower()
-            email_validado = validar_email(email)
-            if email_validado:
-                agenda[nombre] = {'telefono': telefono, 'email': email}
-                print(f'¡Se ha agregado el contacto: {nombre} exitosamente!')           
+        if nombre in agenda:
+            print(f'El contacto: {nombre} ya existe en tu agenda:')
+        else:    
+            telefono = input('Por favor introduzca el teléfono del contacto: ')
+            telef_validado = validar_telf(telefono)
+            if telef_validado:
+                flag_email = True
+                while flag_email:
+                    email = input('Por favor introduzca el email del contacto: ')
+                    email = email.lower()
+                    email_validado = validar_email(email)
+                    if email_validado:
+                        agenda[nombre] = {'telefono': telefono, 'email': email}
+                        print(f'¡Se ha agregado el contacto: {nombre} exitosamente!')  
+                        flag_email = False         
+                    else:
+                        print('El email ingresado es inválido')
             else:
-                print('El email ingresado es inválido')
-        else:
-            print('El número de telefono ingresado es inválido')
+                print('El número de telefono ingresado es inválido')
     else:
         print('El nombre ingresado es inválido')        
 
@@ -70,13 +78,13 @@ def agregar_contacto(agenda):
 
 def buscar_contacto(agenda):
     nombre = input('Por favor introduzca el nombre del contacto a buscar: ')
-    nombre = nombre.upper()
+    nombre = nombre.upper().strip()
     nombre_validado = validar_nombre(nombre)
     if nombre_validado:
         if nombre in agenda:
             print(f'Nombre: {nombre}')
-            print(f'Teléfono: {agenda['nombre']['telefono']}')
-            print(f'email: {agenda['nombre']['email']}')
+            print(f'Teléfono: {agenda[nombre]['telefono']}')
+            print(f'email: {agenda[nombre]['email']}')
         else:
             print(f'El contacto: {nombre} no ha sido encontrado')
     else:
@@ -120,20 +128,16 @@ def switch_case_agenda(opcion):
             agregar_contacto(agenda)
         case 2:
             print(Fore.LIGHTYELLOW_EX + '\nMODIFICAR CONTACTO')
-            # modificar_contacto()
-            # pass
+            # modificar_contacto(agenda)         
         case 3:
             print(Fore.LIGHTYELLOW_EX + '\nBUCAR CONTACTO')
-            # buscar_contacto()
-            # pass
+            buscar_contacto(agenda)      
         case 4:
             print(Fore.LIGHTYELLOW_EX + '\nLISTA DE CONTACTOS')
-            # lista_contactos()
-            # pass    
+            # lista_contactos(agenda)        
         case 5:
             print(Fore.LIGHTYELLOW_EX + '\nELIMINAR CONTACTO')
-            # eliminar_contacto()
-            # pass
+            # eliminar_contacto(agenda)
         case 6:
             print(agenda)
             print(Fore.LIGHTYELLOW_EX + '\nSaliendo del sistema...')
