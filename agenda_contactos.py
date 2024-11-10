@@ -68,7 +68,21 @@ def agregar_contacto(agenda):
 
 #? 3. **************************** Función para  Buscar Contacto ************************************************************
 
-
+def buscar_contacto(agenda):
+    nombre = input('Por favor introduzca el nombre del contacto a buscar: ')
+    nombre = nombre.upper()
+    nombre_validado = validar_nombre(nombre)
+    if nombre_validado:
+        if nombre in agenda:
+            print(f'Nombre: {nombre}')
+            print(f'Teléfono: {agenda['nombre']['telefono']}')
+            print(f'email: {agenda['nombre']['email']}')
+        else:
+            print(f'El contacto: {nombre} no ha sido encontrado')
+    else:
+        print(Fore.LIGHTRED_EX + f'Formato de nombre no válido' + Style.RESET_ALL)
+       
+         
 
 #? 4. **************************** Función Lista de Contactos ***************************************************************
 
