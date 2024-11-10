@@ -93,6 +93,15 @@ def buscar_contacto(agenda):
          
 
 #? 4. **************************** Función Lista de Contactos ***************************************************************
+def listar_agenda(agenda):
+    if agenda:
+        agenda_ordenada = dict(sorted(agenda.items()))
+        print('\nLista de contactos:\n')
+        for nombre, info in agenda_ordenada.items():
+            print(f'Nombre: {nombre}')
+            print(f'Teléfono: {info['telefono']}')
+            print(f'email: {info['email']}')
+            print('-' * 30)
 
 
 
@@ -134,12 +143,11 @@ def switch_case_agenda(opcion):
             buscar_contacto(agenda)      
         case 4:
             print(Fore.LIGHTYELLOW_EX + '\nLISTA DE CONTACTOS')
-            # lista_contactos(agenda)        
+            listar_agenda(agenda)       
         case 5:
             print(Fore.LIGHTYELLOW_EX + '\nELIMINAR CONTACTO')
-            # eliminar_contacto(agenda)
+            eliminar_contacto(agenda)
         case 6:
-            print(agenda)
             print(Fore.LIGHTYELLOW_EX + '\nSaliendo del sistema...')
         case _:
             print(Fore.LIGHTRED_EX + '\nIntroduzca un valor válido...' + Style.RESET_ALL)
